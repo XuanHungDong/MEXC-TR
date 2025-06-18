@@ -4,15 +4,14 @@ import httpx
 
 app = FastAPI()
 
-API_KEY = "mx0vgITrGvSsnLFMDJ"  # key mới của bạn
-API_SECRET = "..."  # Thay bằng secret đúng
-
+API_KEY = "YOUR_API_KEY"
+API_SECRET = "YOUR_API_SECRET"
 BASE_URL = "https://contract.mexc.com"
 
 def sign_request(params, secret):
     sorted_params = sorted(params.items())
-    query_string = "&".join("{}={}".format(k, v) for k, v in sorted_params)
-    return hmac.new(secret.encode('utf-8'), query_string.encode('utf-8'), hashlib.sha256).hexdigest()
+    query_string = "&".join(f"{k}={v}" for k, v in sorted_params)
+    return hmac.new(secret.encode("utf-8"), query_string.encode("utf-8"), hashlib.sha256).hexdigest()
 
 async def send_order(symbol, vol, side, leverage):
     params = {
@@ -28,7 +27,7 @@ async def send_order(symbol, vol, side, leverage):
         "leverage": leverage,
     }
     params["sign"] = sign_request(params, API_SECRET)
-    async with httpx.AsyncClient(timeout=10) as client:
+    async with httpx.AsyncClient() as client:
         res = await client.post(BASE_URL + "/api/v1/private/order/submit", data=params)
         return res.text
 
