@@ -4,8 +4,8 @@ import httpx
 
 app = FastAPI()
 
-API_KEY = "YOUR_API_KEY"
-API_SECRET = "YOUR_API_SECRET"
+API_KEY = "mx0vgITrGvSsnLFMDJ"
+API_SECRET = "95adacd4508e4775bac8085638d191a"
 BASE_URL = "https://contract.mexc.com"
 
 def sign_request(params, secret):
@@ -38,7 +38,3 @@ async def short():
 @app.get("/close")
 async def close():
     return await send_order("BTC_USDT", 0.1, 4, 10)
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=10000)
