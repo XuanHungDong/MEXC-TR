@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 import hmac, hashlib, time
 import httpx
+import os
 
 app = FastAPI()
 
-API_KEY = "mx0vglTrGvSsnLFMDJ"
-API_SECRET = "95adacd4508e4775bac80858638d191a"
+API_KEY = os.getenv("API_KEY")
+API_SECRET = os.getenv("API_SECRET")
 BASE_URL = "https://contract.mexc.com"
 
 def sign_request(params, secret):
@@ -33,8 +34,8 @@ async def send_order(symbol, vol, side, leverage):
         return res.text
 
 @app.get("/")
-async def root():
-    return {"message": "✅ Bot đang chạy trên Render"}
+def root():
+    return {"message": "✅ Bot MEXC đang chạy trên Render"}
 
 @app.get("/short")
 async def short():
