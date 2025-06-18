@@ -1,11 +1,11 @@
-import hmac, hashlib, time
 from fastapi import FastAPI
+import hmac, hashlib, time
 import httpx
 
 app = FastAPI()
 
-API_KEY = "mx0gvITtGVsnLFMDJ"
-API_SECRET = "95adacd4508e4775bac8085638d191a"
+API_KEY = "mx0vglTrGvSsnLFMDJ"
+API_SECRET = "95adacd4508e4775bac80858638d191a"
 BASE_URL = "https://contract.mexc.com"
 
 def sign_request(params, secret):
@@ -24,12 +24,17 @@ async def send_order(symbol, vol, side, leverage):
         "type": 1,
         "open_type": 1,
         "position_id": 0,
-        "leverage": leverage
+        "leverage": leverage,
     }
     params["sign"] = sign_request(params, API_SECRET)
+
     async with httpx.AsyncClient(timeout=15) as client:
         res = await client.post(BASE_URL + "/api/v1/private/order/submit", data=params)
         return res.text
+
+@app.get("/")
+async def root():
+    return {"message": "✅ Bot đang chạy trên Render"}
 
 @app.get("/short")
 async def short():
